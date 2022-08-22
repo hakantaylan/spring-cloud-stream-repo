@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    function:
+      definition: calculateNthPrime;uppercase;reverse
+    stream:
+      bindings:
+        calculateNthPrime-in-0:
+          consumer:
+            max-attempts: 3
+            back-off-initial-interval: 100
+            retryable-exceptions:
+              javax:
+                validation:
+                  ValidationException: false
+          destination: input-topic
+          group: consumer-group
+          concurrency: 2
+        calculateNthPrime-out-0:
+          destination: output-topic
+        uppercase-in-0:
+          destination: uppercase-input-topic
+        uppercase-out-0:
+          destination: uppercase-output-topic
+        reverse-in-0:
+          destination: reverse-input-topic
+        reverse-out-0:
+          destination: reverse-output-topic
