@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    stream:
+      binders:
+        coolrabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5671
+        awesomerabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+      function:
+        definition: toUpperCase
+      bindings:
+        toUpperCase-in-0:
+          destination: TOUPPERCASE # exchange
+          group: INPUT # queue
+          binder: coolrabbit
+        toUpperCase-out-0:
+          destination: TOUPPERCASE
+          group: OUTPUT
+          binder: awesomerabbit
+          producer:
+            requiredGroups:
+              - OUTPUT # to create the queue automatically
